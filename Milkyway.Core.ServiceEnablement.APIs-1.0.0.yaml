@@ -6,7 +6,7 @@ info:
 
 servers:
   - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/CHANAKMEM/Milkyway.Core.ServiceEnablement.APIs/1.0.0
+    url: https://IP:PORT/Milkyway.Core.ServiceEnablement.APIs/1.0.0
 
 security:
   - Bearer: []
@@ -23,40 +23,32 @@ paths:
         - name: projectId
           in: path
           required: true
-          schema:
-            type: string
-          description: รหัสโปรเจกต์
-        - name: x-ais-order-ref
+          schema: { type: string }
+          description: Project ID
+
+        - name: x-ais-OrderRef
           in: header
           required: true
-          schema:
-            type: string
+          schema: { type: string }
+          description: Reference/Idempotency key for this request
         - name: x-ais-channel
           in: header
           required: true
-          schema:
-            type: string
-        - name: x-ais-username
-          in: header
-          required: true
-          schema:
-            type: string
-        - name: x-ais-user-id
-          in: header
-          required: true
-          schema:
-            type: string
+          schema: { type: string }
         - name: content-language
           in: header
           required: false
-          schema:
-            type: string
-            default: en
-        - name: x-access-token
+          schema: { type: string }
+          description: Preferred language for messages (e.g., "th", "en")
+        - name: x-ais-user-id
           in: header
-          required: false
-          schema:
-            type: string
+          schema: { type: string }
+          example: 63e9eb9e733c3cc96dfe5027
+
+        - name: x-ais-user-name
+          in: header
+          schema: { type: string }
+          example: kanct571
 
       requestBody:
         required: true
@@ -145,41 +137,32 @@ paths:
         - name: projectId
           in: path
           required: true
-          schema:
-            type: string
-          description: รหัสโปรเจกต์
-        - name: x-ais-order-ref
+          schema: { type: string }
+          description: Project ID
+
+        - name: x-ais-OrderRef
           in: header
           required: true
-          schema:
-            type: string
+          schema: { type: string }
+          description: Reference/Idempotency key for this request
         - name: x-ais-channel
           in: header
           required: true
-          schema:
-            type: string
-        - name: x-ais-username
-          in: header
-          required: true
-          schema:
-            type: string
-        - name: x-ais-user-id
-          in: header
-          required: true
-          schema:
-            type: string
+          schema: { type: string }
         - name: content-language
           in: header
           required: false
-          schema:
-            type: string
-            default: en
-        - name: x-access-token
+          schema: { type: string }
+          description: Preferred language for messages (e.g., "th", "en")
+        - name: x-ais-user-id
           in: header
-          required: false
-          schema:
-            type: string
+          schema: { type: string }
+          example: 63e9eb9e733c3cc96dfe5027
 
+        - name: x-ais-user-name
+          in: header
+          schema: { type: string }
+          example: kanct571
       requestBody:
         required: true
         content:
@@ -270,35 +253,32 @@ paths:
         - name: projectId
           in: path
           required: true
-          schema:
-            type: string
-        - name: x-ais-order-ref
+          schema: { type: string }
+          description: Project ID
+
+        - name: x-ais-OrderRef
           in: header
           required: true
-          schema:
-            type: string
+          schema: { type: string }
+          description: Reference/Idempotency key for this request
         - name: x-ais-channel
           in: header
           required: true
-          schema:
-            type: string
+          schema: { type: string }
         - name: content-language
           in: header
           required: false
-          schema:
-            type: string
-            default: en
-        - name: mw-user-id
+          schema: { type: string }
+          description: Preferred language for messages (e.g., "th", "en")
+        - name: x-ais-user-id
           in: header
-          required: false
-          schema:
-            type: string
-        - name: x-ais-username
-          in: header
-          required: false
-          schema:
-            type: string
+          schema: { type: string }
+          example: 63e9eb9e733c3cc96dfe5027
 
+        - name: x-ais-user-name
+          in: header
+          schema: { type: string }
+          example: kanct571
       requestBody:
         required: true
         content:
@@ -393,38 +373,22 @@ paths:
           required: true
           schema: { type: string }
           description: Reference/Idempotency key for this request
-
         - name: x-ais-channel
           in: header
           required: true
-          schema:
-            type: string
-            description: Channel of caller. If not MILKYWAY_WEB, `taxId` in each row is required.
-            enum: [MILKYWAY_WEB, PARTNER_API, BATCH_JOB]
-          example: MILKYWAY_WEB
-
+          schema: { type: string }
         - name: content-language
           in: header
           required: false
           schema: { type: string }
           description: Preferred language for messages (e.g., "th", "en")
-        - name: Accept
+        - name: x-ais-user-id
           in: header
-          required: true
-          schema:
-            type: string
-            enum: [application/json, text/csv]
-          description: Response media type
-
-        - name: mw-user-id
-          in: header
-          required: true
           schema: { type: string }
           example: 63e9eb9e733c3cc96dfe5027
 
-        - name: mw-user-name
+        - name: x-ais-user-name
           in: header
-          required: true
           schema: { type: string }
           example: kanct571
 

@@ -8,10 +8,10 @@ This repository contains the **OpenAPI 3.0 specification** for the **Milkyway Co
 
 The APIs provide operations for:
 
-- **Suspend** SIM connectivity  
-- **Reconnect** suspended SIMs (with optional main package change)  
-- **Terminate** SIM connectivity  
-- **Change Main Package**  
+- **Suspend** Suspend Connectivity
+- **Reconnect** Reconnect Connectivity
+- **Terminate** Terminate Connectivity  
+- **Change Main Package**  Change Sim Serial 
 
 Each API supports both **JSON** and **CSV** request/response formats.
 
@@ -124,9 +124,3 @@ You can:
 © 2025 AIS Milkyway Project – Design and API Specification
 """
 
-# สร้างไฟล์ README.md
-file_path = "/mnt/data/README.md"
-with open(file_path, "w", encoding="utf-8") as f:
-    f.write(readme_content)
-
-file_path

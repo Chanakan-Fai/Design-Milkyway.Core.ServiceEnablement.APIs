@@ -55,7 +55,7 @@ POST /api/v2/project/{projectId}/connectivities/terminates
 ```
 POST /api/v2/project/{projectId}/connectivities/change-sim
 ```
-- Change the main package of SIM(s)  
+- Change the Sim Serial  
 - Supports both JSON and CSV formats  
 
 ---

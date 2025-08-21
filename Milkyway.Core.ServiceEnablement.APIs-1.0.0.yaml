@@ -1,67 +1,82 @@
 openapi: 3.0.3
 info:
   title: Milkyway.Core.ServiceEnablement.APIs
-  description: APIs for management connectivity
   version: 1.0.0
+  description: APIs for management connectivity
+
 servers:
-- url: https://virtserver.swaggerhub.com/CHANAKMEM/Milkyway.Core.ServiceEnablement.APIs/1.0.0
-  description: SwaggerHub API Auto Mocking
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/CHANAKMEM/Milkyway.Core.ServiceEnablement.APIs/1.0.0
+
 security:
-- Bearer: []
+  - Bearer: []
+
 paths:
   /api/v2/project/{projectId}/connectivities/suspend:
     post:
-      tags:
-      - Connectivities
       summary: Suspend SIM connectivity
       description: ระงับการใช้งานของ SIM หนึ่งหรือหลายรายการ
       operationId: suspendConnectivity
+      tags:
+        - Connectivities
       parameters:
-      - name: projectId
-        in: path
-        description: รหัสโปรเจกต์
-        required: true
-        schema:
-          type: string
-      - name: x-ais-order-ref
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-ais-channel
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-ais-username
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-ais-user-id
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: content-language
-        in: header
-        required: false
-        schema:
-          type: string
-          default: en
-      - name: x-access-token
-        in: header
-        required: false
-        schema:
-          type: string
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: รหัสโปรเจกต์
+        - name: x-ais-order-ref
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ais-channel
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ais-username
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ais-user-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: content-language
+          in: header
+          required: false
+          schema:
+            type: string
+            default: en
+        - name: x-access-token
+          in: header
+          required: false
+          schema:
+            type: string
+
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              minItems: 1
               type: array
+              minItems: 1
               items:
-                $ref: "#/components/schemas/connectivities_suspend_body"
+                type: object
+                properties:
+                  mobileNo:
+                    type: string
+                    example: '0829921384'
+                  simSerial:
+                    type: string
+                    example: '2430004100504'
+                  taxId:
+                    type: string
+                    example: '678123421111401'
           text/csv:
             schema:
               type: string
@@ -73,16 +88,35 @@ paths:
                   mobileNo,simSerial,taxId
                   0829921384,2430004100504,678123421111401
                   0829921385,2430004100505,678123421111402
-        required: true
+
       responses:
-        "200":
+        '200':
           description: การร้องขอสำเร็จ
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/inline_response_200"
+                  type: object
+                  properties:
+                    mobileNo:
+                      type: string
+                      example: '0829921384'
+                    simSerial:
+                      type: string
+                      example: '2430004100504'
+                    taxId:
+                      type: string
+                      example: '678123421111401'
+                    mobileStatus:
+                      type: string
+                      example: Suspend-Inprogress
+                    code:
+                      type: string
+                      example: "20200"
+                    message:
+                      type: string
+                      example: The requested operation now in progress.
             text/csv:
               schema:
                 type: string
@@ -94,65 +128,81 @@ paths:
                     mobileNo,simSerial,taxId,mobileStatus,code,message
                     0829921384,2430004100504,678123421111401,Suspend-Inprogress,20200,The requested operation now in progress.
                     0829921385,2430004100505,678123421111402,Suspend-Inprogress,20200,The requested operation now in progress.
-        "400":
+        '400':
           description: ข้อมูลไม่ถูกต้อง
-        "401":
+        '401':
           description: ไม่มีสิทธิ์เข้าถึง (Unauthorized)
-        "500":
+        '500':
           description: Internal server error
   /api/v2/project/{projectId}/connectivities/reconnect:
     post:
-      tags:
-      - Connectivities
       summary: Reconnect SIM connectivity
       description: เปิดการใช้งาน SIM หนึ่งหรือหลายรายการอีกครั้ง
       operationId: reconnectConnectivity
+      tags:
+        - Connectivities
       parameters:
-      - name: projectId
-        in: path
-        description: รหัสโปรเจกต์
-        required: true
-        schema:
-          type: string
-      - name: x-ais-order-ref
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-ais-channel
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-ais-username
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-ais-user-id
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: content-language
-        in: header
-        required: false
-        schema:
-          type: string
-          default: en
-      - name: x-access-token
-        in: header
-        required: false
-        schema:
-          type: string
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: รหัสโปรเจกต์
+        - name: x-ais-order-ref
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ais-channel
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ais-username
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ais-user-id
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: content-language
+          in: header
+          required: false
+          schema:
+            type: string
+            default: en
+        - name: x-access-token
+          in: header
+          required: false
+          schema:
+            type: string
+
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              minItems: 1
               type: array
+              minItems: 1
               items:
-                $ref: "#/components/schemas/connectivities_reconnect_body"
+                type: object
+                properties:
+                  mobileNo:
+                    type: string
+                    example: '0829921384'
+                  simSerial:
+                    type: string
+                    example: '2430004100504'
+                  taxId:
+                    type: string
+                    example: '678123421111401'
+                  mainPackageName:
+                    type: string
+                    example: 'Smartway Fleet Management APN 60B FixIP Corp'
+                 
           text/csv:
             schema:
               type: string
@@ -163,16 +213,35 @@ paths:
                 value: |
                   mobileNo,simSerial,taxId,mainPackageName,mainPackageCode
                   0829921384,2430004100504,678123421111401,Smartway Fleet Management APN 60B FixIP Corp,P1609408189
-        required: true
+
       responses:
-        "200":
+        '200':
           description: การร้องขอสำเร็จ
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/inline_response_200_1"
+                  type: object
+                  properties:
+                    mobileNo:
+                      type: string
+                      example: '0829921384'
+                    simSerial:
+                      type: string
+                      example: '2430004100504'
+                    taxId:
+                      type: string
+                      example: '678123421111401'
+                    mobileStatus:
+                      type: string
+                      example: Activate-Inprogress
+                    code:
+                      type: string
+                      example: "20200"
+                    message:
+                      type: string
+                      example: The requested operation now in progress.
             text/csv:
               schema:
                 type: string
@@ -183,76 +252,72 @@ paths:
                   value: |
                     mobileNo,simSerial,taxId,mobileStatus,code,message
                     0829921384,2430004100504,678123421111401,Activate-Inprogress,20200,The requested operation now in progress.
-        "400":
+
+        '400':
           description: ข้อมูลไม่ถูกต้อง
-        "401":
+        '401':
           description: ไม่มีสิทธิ์เข้าถึง (Unauthorized)
-        "500":
+        '500':
           description: Internal server error
   /api/v2/project/{projectId}/connectivities/terminates:
     post:
-      tags:
-      - Connectivities
       summary: Terminate SIM connectivity
       description: ยกเลิกการใช้งานของ SIM หนึ่งหรือหลายรายการ
       operationId: terminateConnectivity
+      tags:
+        - Connectivities
       parameters:
-      - name: projectId
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: x-ais-order-ref
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-ais-channel
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: content-language
-        in: header
-        required: false
-        schema:
-          type: string
-          default: en
-      - name: content-type
-        in: header
-        required: false
-        schema:
-          type: string
-          default: application/json
-      - name: accept
-        in: header
-        required: true
-        schema:
-          type: string
-          default: application/json
-      - name: authorization
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: mw-user-id
-        in: header
-        required: false
-        schema:
-          type: string
-      - name: mw-user-name
-        in: header
-        required: false
-        schema:
-          type: string
+        - name: projectId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: x-ais-order-ref
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: x-ais-channel
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: content-language
+          in: header
+          required: false
+          schema:
+            type: string
+            default: en
+        - name: mw-user-id
+          in: header
+          required: false
+          schema:
+            type: string
+        - name: x-ais-username
+          in: header
+          required: false
+          schema:
+            type: string
+
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              minItems: 1
               type: array
+              minItems: 1
               items:
-                $ref: "#/components/schemas/connectivities_suspend_body"
+                type: object
+                properties:
+                  mobileNo:
+                    type: string
+                    example: '0829921384'
+                  simSerial:
+                    type: string
+                    example: '2430004100504'
+                  taxId:
+                    type: string
+                    example: '678123421111401'
           text/csv:
             schema:
               type: string
@@ -264,16 +329,35 @@ paths:
                   mobileNo,simSerial,taxId
                   0829921384,2430004100504,678123421111401
                   0829921385,2430004100505,678123421111402
-        required: true
+
       responses:
-        "200":
+        '200':
           description: การร้องขอสำเร็จ
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/inline_response_200_2"
+                  type: object
+                  properties:
+                    mobileNo:
+                      type: string
+                      example: '0829921384'
+                    simSerial:
+                      type: string
+                      example: '2430004100504'
+                    taxId:
+                      type: string
+                      example: '678123421111401'
+                    mobileStatus:
+                      type: string
+                      example: Terminate-Inprogress
+                    code:
+                      type: string
+                      example: "20200"
+                    message:
+                      type: string
+                      example: The requested operation now in progress.
             text/csv:
               schema:
                 type: string
@@ -285,108 +369,174 @@ paths:
                     mobileNo,simSerial,taxId,mobileStatus,code,message
                     0829921384,2430004100504,678123421111401,Terminate-Inprogress,20200,The requested operation now in progress.
                     0829921385,2430004100505,678123421111402,Terminate-Inprogress,20200,The requested operation now in progress.
-        "400":
+        '400':
           description: ข้อมูลไม่ถูกต้อง
-        "401":
+        '401':
           description: ไม่มีสิทธิ์เข้าถึง (Unauthorized)
-        "500":
+        '500':
           description: Internal server error
+  /api/v2/project/{projectId}/connectivities/change-sim:
+    post:
+      summary: Change SIM Serial in bulk
+      operationId: changeSimBulk
+      tags:
+        - Connectivities
+      parameters:
+        - name: projectId
+          in: path
+          required: true
+          schema: { type: string }
+          description: Project ID
+
+        - name: x-ais-OrderRef
+          in: header
+          required: true
+          schema: { type: string }
+          description: Reference/Idempotency key for this request
+
+        - name: x-ais-channel
+          in: header
+          required: true
+          schema:
+            type: string
+            description: Channel of caller. If not MILKYWAY_WEB, `taxId` in each row is required.
+            enum: [MILKYWAY_WEB, PARTNER_API, BATCH_JOB]
+          example: MILKYWAY_WEB
+
+        - name: content-language
+          in: header
+          required: false
+          schema: { type: string }
+          description: Preferred language for messages (e.g., "th", "en")
+        - name: Accept
+          in: header
+          required: true
+          schema:
+            type: string
+            enum: [application/json, text/csv]
+          description: Response media type
+
+        - name: mw-user-id
+          in: header
+          required: true
+          schema: { type: string }
+          example: 63e9eb9e733c3cc96dfe5027
+
+        - name: mw-user-name
+          in: header
+          required: true
+          schema: { type: string }
+          example: kanct571
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            examples:
+              jsonExample:
+                summary: JSON array example
+                value:
+                  - mobileNo: "0829921384"
+                    oldSimSerial: "2430004100504"
+                    newSimSerial: "2430004100506"
+                    taxId: "678123421111401"
+                  - mobileNo: "0829921401"
+                    newSimSerial: "2430004100507"
+          text/csv:
+            schema:
+              type: string
+              description: |
+                CSV with header: mobileNo,oldSimSerial,newSimSerial,taxId
+                - At least one of mobileNo or oldSimSerial must be present per row
+                - taxId is required per row when x-ais-channel != MILKYWAY_WEB
+            examples:
+              csvExample:
+                summary: CSV example
+                value: |
+                  mobileNo,oldSimSerial,newSimSerial,taxId
+                  0829921384,2430004100504,2430004100506,678123421111401
+                  0829921401,,2430004100507,
+
+      responses:
+        '200':
+          description: Bulk result (partial success allowed)
+          content:
+            application/json:
+              examples:
+                successJson:
+                  value:
+                    summary: { total: 2, succeeded: 2, failed: 0 }
+                    results:
+                      - mobileNo: "0829921384"
+                        oldSimSerial: "2430004100504"
+                        newSimSerial: "2430004100506"
+                        status: "SUCCESS"
+                        resultCode: "20000"
+                        message: "Changed successfully"
+                        orderNo: "SO-20250814-000123"
+                      - mobileNo: "0829921401"
+                        newSimSerial: "2430004100507"
+                        status: "SUCCESS"
+                        resultCode: "20000"
+                        message: "Changed successfully"
+                        orderNo: "SO-20250814-000124"
+            text/csv:
+              schema:
+                type: string
+                description: CSV result with appended 
+              examples:
+                successCsv:
+                  value: |
+                    mobileNo,oldSimSerial,newSimSerial,taxId,status,resultCode,message,orderNo
+                    0829921384,2430004100504,2430004100506,678123421111401,SUCCESS,20000,Changed successfully,SO-20250814-000123
+                    0829921401,,2430004100507,,SUCCESS,20000,Changed successfully,SO-20250814-000124
+
+        '400':
+          description: Invalid request body or CSV format / missing mandatory fields
+          content:
+            application/json:
+              examples:
+                invalidCsv:
+                  value: { resultCode: "40300", message: "Invalid CSV: missing required header(s): newSimSerial" }
+                invalidJson:
+                  value: { resultCode: "40300", message: "items[0]: must contain at least one of mobileNo or oldSimSerial" }
+
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                unauthorized:
+                  value: { resultCode: "40101", message: "Access denied" }
+
+        '403':
+          description: Forbidden / Channel not allowed / parameter conflict
+          content:
+            application/json:
+              examples:
+                conflict:
+                  value: { resultCode: "40301", message: "New SIM already in use by another number" }
+
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              examples:
+                notFound:
+                  value: { resultCode: "40401", message: "Data not found" }
+
+        '500':
+          description: Internal Server Error / Upstream error
+          content:
+            application/json:
+              examples:
+                systemError:
+                  value: { resultCode: "50000", message: "System error" }
 components:
-  schemas:
-    connectivities_reconnect_body:
-      type: object
-      properties:
-        mobileNo:
-          type: string
-          example: "0829921384"
-        simSerial:
-          type: string
-          example: "2430004100504"
-        taxId:
-          type: string
-          example: "678123421111401"
-        mainPackageName:
-          type: string
-          example: Smartway Fleet Management APN 60B FixIP Corp
-    connectivities_suspend_body:
-      type: object
-      properties:
-        mobileNo:
-          type: string
-          example: "0829921384"
-        simSerial:
-          type: string
-          example: "2430004100504"
-        taxId:
-          type: string
-          example: "678123421111401"
-    inline_response_200_1:
-      type: object
-      properties:
-        mobileNo:
-          type: string
-          example: "0829921384"
-        simSerial:
-          type: string
-          example: "2430004100504"
-        taxId:
-          type: string
-          example: "678123421111401"
-        mobileStatus:
-          type: string
-          example: Activate-Inprogress
-        code:
-          type: string
-          example: "20200"
-        message:
-          type: string
-          example: The requested operation now in progress.
-    inline_response_200:
-      type: object
-      properties:
-        mobileNo:
-          type: string
-          example: "0829921384"
-        simSerial:
-          type: string
-          example: "2430004100504"
-        taxId:
-          type: string
-          example: "678123421111401"
-        mobileStatus:
-          type: string
-          example: Suspend-Inprogress
-        code:
-          type: string
-          example: "20200"
-        message:
-          type: string
-          example: The requested operation now in progress.
-    inline_response_200_2:
-      type: object
-      properties:
-        mobileNo:
-          type: string
-          example: "0829921384"
-        simSerial:
-          type: string
-          example: "2430004100504"
-        taxId:
-          type: string
-          example: "678123421111401"
-        mobileStatus:
-          type: string
-          example: Terminate-Inprogress
-        code:
-          type: string
-          example: "20200"
-        message:
-          type: string
-          example: The requested operation now in progress.
   securitySchemes:
     oauth2:
       type: oauth2
-      description: |
+      description: >
         The Client Credentials grant type is used by clients to obtain an access token outside of the context of a user.
       flows:
         clientCredentials:
@@ -394,9 +544,18 @@ components:
           scopes: {}
     Bearer:
       type: apiKey
-      description: |
-        JWT Authorization header using the Bearer scheme.
+      description: >
+        JWT Authorization header using the Bearer scheme.xq
+
         Enter 'Bearer' [space] and then your token in the text input below.
+
         Example: "Bearer 12345abcdef"
       name: Authorization
       in: header
+  schemas:
+    Schema:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64

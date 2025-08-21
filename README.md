@@ -1,4 +1,3 @@
-readme_content = """# Milkyway Core Service Enablement APIs
 
 This repository contains the **OpenAPI 3.0 specification** for the **Milkyway Core Service Enablement APIs**, which are used to manage SIM connectivity lifecycle such as **Suspend**, **Reconnect**, and **Terminate**.
 
@@ -11,7 +10,7 @@ The APIs provide operations for:
 - **Suspend** Suspend Connectivity
 - **Reconnect** Reconnect Connectivity
 - **Terminate** Terminate Connectivity  
-- **Change Main Package**  Change Sim Serial 
+- **Change Sim Serial**  Change Sim Serial 
 
 Each API supports both **JSON** and **CSV** request/response formats.
 
@@ -65,9 +64,9 @@ POST /api/v2/project/{projectId}/connectivities/terminates
 ```
 - Terminate SIM connectivity permanently  
 
-### 4. Change Main Package
+### 4. Change Sim Serial
 ```
-POST /api/v2/project/{projectId}/connectivities/change-main-pack
+POST /api/v2/project/{projectId}/connectivities/change-sim
 ```
 - Change the main package of SIM(s)  
 - Supports both JSON and CSV formats  

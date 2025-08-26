@@ -60,28 +60,6 @@ POST /api/v2/project/{projectId}/connectivities/change-sim
 
 ---
 
-## 📝 Example Request (JSON)
-
-```json
-[
-  {
-    "mobileNo": "0829921384",
-    "simSerial": "2430004100504",
-    "taxId": "678123421111401",
-    "mainPackageName": "SmartwayFleetManagementAPN60BFixIPCorp"
-  }
-]
-```
-
-## 📊 Example Request (CSV)
-
-```
-mobileNo,simSerial,taxId,mainPackageName
-0829921384,2430004100504,678123421111401,SmartwayFleetManagementAPN60BFixIPCorp
-```
-
----
-
 ## 📬 Responses
 
 - **200 OK** → Operation completed or accepted  
@@ -89,12 +67,6 @@ mobileNo,simSerial,taxId,mainPackageName
 - **400 Bad Request** → Invalid input  
 - **401 Unauthorized** → Invalid or missing token  
 - **500 Internal Server Error** → System error  
-
----
-
-## 🔔 Notification
-
-- After operations complete, notification/email will be triggered according to project policies.
 
 ---
 

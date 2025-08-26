@@ -40,12 +40,12 @@ paths:
           required: false
           schema: { type: string }
           description: Preferred language for messages (e.g., "th", "en")
-        - name: x-ais-user-id
+        - name: mw-user-id
           in: header
           schema: { type: string }
           example: 63e9eb9e733c3cc96dfe5027
 
-        - name: x-ais-user-name
+        - name: mw-user-name
           in: header
           schema: { type: string }
           example: kanct571
@@ -154,15 +154,16 @@ paths:
           required: false
           schema: { type: string }
           description: Preferred language for messages (e.g., "th", "en")
-        - name: x-ais-user-id
+        - name: mw-user-id
           in: header
           schema: { type: string }
           example: 63e9eb9e733c3cc96dfe5027
 
-        - name: x-ais-user-name
+        - name: mw-user-name
           in: header
           schema: { type: string }
           example: kanct571
+
       requestBody:
         required: true
         content:
@@ -270,15 +271,16 @@ paths:
           required: false
           schema: { type: string }
           description: Preferred language for messages (e.g., "th", "en")
-        - name: x-ais-user-id
+        - name: mw-user-id
           in: header
           schema: { type: string }
           example: 63e9eb9e733c3cc96dfe5027
 
-        - name: x-ais-user-name
+        - name: mw-user-name
           in: header
           schema: { type: string }
           example: kanct571
+
       requestBody:
         required: true
         content:
@@ -382,15 +384,16 @@ paths:
           required: false
           schema: { type: string }
           description: Preferred language for messages (e.g., "th", "en")
-        - name: x-ais-user-id
+        - name: mw-user-id
           in: header
           schema: { type: string }
           example: 63e9eb9e733c3cc96dfe5027
 
-        - name: x-ais-user-name
+        - name: mw-user-name
           in: header
           schema: { type: string }
           example: kanct571
+
 
       requestBody:
         required: true
@@ -404,8 +407,6 @@ paths:
                     oldSimSerial: "2430004100504"
                     newSimSerial: "2430004100506"
                     taxId: "678123421111401"
-                  - mobileNo: "0829921401"
-                    newSimSerial: "2430004100507"
           text/csv:
             schema:
               type: string
@@ -419,31 +420,36 @@ paths:
                 value: |
                   mobileNo,oldSimSerial,newSimSerial,taxId
                   0829921384,2430004100504,2430004100506,678123421111401
-                  0829921401,,2430004100507,
+                  0829921401,,2430004100507,2430004100505,678123421111401
 
       responses:
         '200':
-          description: Bulk result (partial success allowed)
+          description: การร้องขอสำเร็จ
           content:
             application/json:
-              examples:
-                successJson:
-                  value:
-                    summary: { total: 2, succeeded: 2, failed: 0 }
-                    results:
-                      - mobileNo: "0829921384"
-                        oldSimSerial: "2430004100504"
-                        newSimSerial: "2430004100506"
-                        status: "SUCCESS"
-                        resultCode: "20000"
-                        message: "Changed successfully"
-                        orderNo: "SO-20250814-000123"
-                      - mobileNo: "0829921401"
-                        newSimSerial: "2430004100507"
-                        status: "SUCCESS"
-                        resultCode: "20000"
-                        message: "Changed successfully"
-                        orderNo: "SO-20250814-000124"
+              schema:
+               type: array
+               items:
+                  type: object
+                  properties:
+                    mobileNo:
+                      type: string
+                      example: '0829921384'
+                    oldSimSerial:
+                      type: string
+                      example: '2430004100504'
+                    newSimSerial:
+                      type: string
+                      example: '2430004100506'
+                    taxId:
+                      type: string
+                      example: '678123421111401'
+                    code:
+                      type: string
+                      example: "20200"
+                    message:
+                      type: string
+                      example: The requested operation now in progress.
             text/csv:
               schema:
                 type: string
@@ -453,7 +459,7 @@ paths:
                   value: |
                     mobileNo,oldSimSerial,newSimSerial,taxId,status,resultCode,message,orderNo
                     0829921384,2430004100504,2430004100506,678123421111401,SUCCESS,20000,Changed successfully,SO-20250814-000123
-                    0829921401,,2430004100507,,SUCCESS,20000,Changed successfully,SO-20250814-000124
+                     0829921384,2430004100504,2430004100505,678123421111401,SUCCESS,20000,Changed successfully,SO-20250814-000123
 
         '400':
           description: Invalid request body or CSV format / missing mandatory fields

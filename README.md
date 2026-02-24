@@ -16,9 +16,9 @@ The APIs are divided into two main groups:
 
 Operations for managing SIM lifecycle:
 
--   **Suspend** -- Suspend Connectivity\
--   **Reconnect** -- Reconnect Connectivity\
--   **Terminate** -- Terminate Connectivity\
+-   **Suspend** -- Suspend Connectivity
+-   **Reconnect** -- Reconnect Connectivity
+-   **Terminate** -- Terminate Connectivity
 -   **Change SIM Serial** -- Change SIM Serial
 
 Each API supports both **JSON** and **CSV** request/response formats.

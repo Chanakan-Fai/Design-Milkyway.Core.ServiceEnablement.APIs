@@ -21,7 +21,7 @@ tags:
 
 paths:
   # =========================
-  # CONNECTIVITIES (unchanged - from your file)
+  # CONNECTIVITIES (partial - from your file)
   # =========================
   /api/v2/project/{projectId}/connectivities/suspend:
     post:
@@ -40,19 +40,6 @@ paths:
           in: header
           required: true
           schema: { type: string }
-        - name: content-language
-          in: header
-          required: false
-          schema: { type: string }
-          description: Preferred language for messages (e.g., "th", "en")
-        - name: mw-user-id
-          in: header
-          schema: { type: string }
-          example: 63e9eb9e733c3cc96dfe5027
-        - name: mw-user-name
-          in: header
-          schema: { type: string }
-          example: kanct571
       requestBody:
         required: true
         content:
@@ -66,33 +53,8 @@ paths:
                   mobileNo: { type: string, example: "0829921384" }
                   simSerial: { type: string, example: "2430004100504" }
                   taxId: { type: string, example: "678123421111401" }
-          text/csv:
-            schema:
-              type: string
-              format: binary
-            examples:
-              example1:
-                summary: Example CSV Input
-                value: |
-                  mobileNo,simSerial,taxId
-                  0829921384,2430004100504,678123421111401
-                  0829921385,2430004100505,678123421111402
       responses:
-        "200":
-          description: การร้องขอสำเร็จ
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    mobileNo: { type: string, example: "0829921384" }
-                    simSerial: { type: string, example: "2430004100504" }
-                    taxId: { type: string, example: "678123421111401" }
-                    mobileStatus: { type: string, example: Suspend-Inprogress }
-                    code: { type: string, example: "20200" }
-                    message: { type: string, example: The requested operation now in progress. }
+        "200": { description: การร้องขอสำเร็จ }
         "400": { description: ข้อมูลไม่ถูกต้อง }
         "401": { description: ไม่มีสิทธิ์เข้าถึง (Unauthorized) }
         "500": { description: Internal server error }
@@ -100,7 +62,6 @@ paths:
   /api/v2/project/{projectId}/connectivities/reconnect:
     post:
       summary: Reconnect SIM connectivity
-      description: เปิดการใช้งาน SIM หนึ่งหรือหลายรายการอีกครั้ง
       operationId: reconnectConnectivity
       tags: [Connectivities]
       parameters:
@@ -108,25 +69,11 @@ paths:
           in: path
           required: true
           schema: { type: string }
-          description: Project ID
         - $ref: "#/components/parameters/XAisOrderRef"
         - name: x-ais-channel
           in: header
           required: true
           schema: { type: string }
-        - name: content-language
-          in: header
-          required: false
-          schema: { type: string }
-          description: Preferred language for messages (e.g., "th", "en")
-        - name: mw-user-id
-          in: header
-          schema: { type: string }
-          example: 63e9eb9e733c3cc96dfe5027
-        - name: mw-user-name
-          in: header
-          schema: { type: string }
-          example: kanct571
       requestBody:
         required: true
         content:
@@ -137,12 +84,10 @@ paths:
               items:
                 type: object
                 properties:
-                  mobileNo: { type: string, example: "0829921384" }
-                  simSerial: { type: string, example: "2430004100504" }
-                  taxId: { type: string, example: "678123421111401" }
-                  mainPackageName:
-                    type: string
-                    example: Smartway Fleet Management APN 60B FixIP Corp
+                  mobileNo: { type: string }
+                  simSerial: { type: string }
+                  taxId: { type: string }
+                  mainPackageName: { type: string }
       responses:
         "200": { description: การร้องขอสำเร็จ }
         "400": { description: ข้อมูลไม่ถูกต้อง }
@@ -152,7 +97,6 @@ paths:
   /api/v2/project/{projectId}/connectivities/terminates:
     post:
       summary: Terminate SIM connectivity
-      description: ยกเลิกการใช้งานของ SIM หนึ่งหรือหลายรายการ
       operationId: terminateConnectivity
       tags: [Connectivities]
       parameters:
@@ -160,7 +104,6 @@ paths:
           in: path
           required: true
           schema: { type: string }
-          description: Project ID
         - $ref: "#/components/parameters/XAisOrderRef"
         - name: x-ais-channel
           in: header
@@ -195,7 +138,6 @@ paths:
           in: path
           required: true
           schema: { type: string }
-          description: Project ID
         - $ref: "#/components/parameters/XAisOrderRef"
         - name: x-ais-channel
           in: header
@@ -205,14 +147,16 @@ paths:
         required: true
         content:
           application/json:
-            examples:
-              jsonExample:
-                summary: JSON array example
-                value:
-                  - mobileNo: "0829921384"
-                    oldSimSerial: "2430004100504"
-                    newSimSerial: "2430004100506"
-                    taxId: "678123421111401"
+            schema:
+              type: array
+              minItems: 1
+              items:
+                type: object
+                properties:
+                  mobileNo: { type: string }
+                  oldSimSerial: { type: string }
+                  newSimSerial: { type: string }
+                  taxId: { type: string }
       responses:
         "200": { description: การร้องขอสำเร็จ }
         "400": { description: Invalid request body }
@@ -222,14 +166,16 @@ paths:
         "500": { description: Internal Server Error }
 
   # ==========================================================
-  # SKY-IOT CALLBACKS (ALL ACTIONS use Ack body)
+  # SKY-IOT CALLBACKS (ALL ACTIONS use Ack body) + type query param
   # ==========================================================
   /api/v1/sky-iot/callback/register-sim:
     post:
       tags: [SKY-IOT Callback]
       summary: SKY-IOT Callback - Register SIM
       operationId: skyIotCallbackRegisterSim
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -244,7 +190,9 @@ paths:
       tags: [SKY-IOT Callback]
       summary: SKY-IOT Callback - Change Main Package
       operationId: skyIotCallbackChangeMainPackage
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -259,7 +207,9 @@ paths:
       tags: [SKY-IOT Callback]
       summary: SKY-IOT Callback - Purchase On-top Package
       operationId: skyIotCallbackPurchaseOnTop
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -274,7 +224,9 @@ paths:
       tags: [SKY-IOT Callback]
       summary: SKY-IOT Callback - Change SIM
       operationId: skyIotCallbackChangeSim
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -289,7 +241,9 @@ paths:
       tags: [SKY-IOT Callback]
       summary: SKY-IOT Callback - Suspend SIM
       operationId: skyIotCallbackSuspend
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -304,7 +258,9 @@ paths:
       tags: [SKY-IOT Callback]
       summary: SKY-IOT Callback - Activate SIM
       operationId: skyIotCallbackActivate
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -319,7 +275,9 @@ paths:
       tags: [SKY-IOT Callback]
       summary: SKY-IOT Callback - Terminate SIM
       operationId: skyIotCallbackTerminate
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -330,14 +288,16 @@ paths:
         "400": { $ref: "#/components/responses/BadRequest" }
 
   # ==========================================================
-  # SKY-MPO CALLBACKS (ALL ACTIONS - body varies per file)
+  # SKY-MPO CALLBACKS + type query param
   # ==========================================================
   /api/v1/sky-mpo/callback/register-sim:
     post:
       tags: [SKY-MPO Callback]
       summary: SKY-MPO Callback - Register SIM
       operationId: skyMpoCallbackRegisterSim
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -352,7 +312,9 @@ paths:
       tags: [SKY-MPO Callback]
       summary: SKY-MPO Callback - Change Main Package
       operationId: skyMpoCallbackChangeMainPackage
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -367,7 +329,9 @@ paths:
       tags: [SKY-MPO Callback]
       summary: SKY-MPO Callback - Purchase On-top Package
       operationId: skyMpoCallbackPurchaseOnTop
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -382,7 +346,9 @@ paths:
       tags: [SKY-MPO Callback]
       summary: SKY-MPO Callback - Change SIM
       operationId: skyMpoCallbackChangeSim
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -397,7 +363,9 @@ paths:
       tags: [SKY-MPO Callback]
       summary: SKY-MPO Callback - Suspend
       operationId: skyMpoCallbackSuspend
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -412,7 +380,9 @@ paths:
       tags: [SKY-MPO Callback]
       summary: SKY-MPO Callback - Activate
       operationId: skyMpoCallbackActivate
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -427,7 +397,9 @@ paths:
       tags: [SKY-MPO Callback]
       summary: SKY-MPO Callback - Terminate
       operationId: skyMpoCallbackTerminate
-      parameters: [ { $ref: "#/components/parameters/XAisOrderRef" } ]
+      parameters:
+        - $ref: "#/components/parameters/XAisOrderRef"
+        - $ref: "#/components/parameters/CallbackType"
       requestBody:
         required: true
         content:
@@ -463,6 +435,20 @@ components:
         maxLength: 128
         example: CO-vvz2s-23090510404825656900
 
+    CallbackType:
+      name: type
+      in: query
+      required: true
+      description: |
+        Callback processing type:
+        - mobile: single billing per number (ลงทะเบียนและเปิดบิลเบอร์ใครเบอร์มัน)
+        - sa: shared billing under the same billing account (Service Account mode)
+        - ba: shared billing under the same billing account (Billing Account mode)
+      schema:
+        type: string
+        enum: [mobile, sa, ba]
+      example: mobile
+
   schemas:
     CallbackAck:
       type: object
@@ -478,19 +464,10 @@ components:
         resultCode: { type: string, example: "40000" }
         message: { type: string, example: "Invalid payload" }
 
-    # =========================
-    # SKY-IOT (Ack body for ALL actions)
-    # =========================
     SkyIotAckCallback:
       type: object
       additionalProperties: true
-      required:
-        - publicIdType
-        - publicIdValue
-        - privateIdType
-        - privateIdValue
-        - orderNo
-        - statusCode
+      required: [publicIdType, publicIdValue, privateIdType, privateIdValue, orderNo, statusCode]
       properties:
         publicIdType: { type: string, example: "iotNo" }
         publicIdValue: { type: string, example: "9991201036" }
@@ -499,23 +476,10 @@ components:
         orderNo: { type: string, example: "IC-NEW-25050615115260419993" }
         statusCode: { type: string, example: "200" }
 
-    # =========================
-    # SKY-MPO Register SIM (Rich)
-    # =========================
     SkyMpoRegisterSimRichCallback:
       type: object
       additionalProperties: true
-      required:
-        - privateIdType
-        - privateIdValue
-        - publicIdType
-        - publicIdValue
-        - orderRefId
-        - statusCode
-        - state
-        - stateDate
-        - customerOrderItem
-        - listOrderItem
+      required: [privateIdType, privateIdValue, publicIdType, publicIdValue, orderRefId, statusCode, state, stateDate]
       properties:
         privateIdType: { type: string, example: "uuid" }
         privateIdValue: { type: string, example: "ec821f7d-f2b8-4ddf-97af-3fa19311ac51" }
@@ -525,41 +489,7 @@ components:
         statusCode: { type: string, example: "200" }
         state: { type: string, example: "Completed" }
         stateDate: { type: string, example: "05/09/2023 10:41:46" }
-        createdDate: { type: string, nullable: true }
-        lastUpdateDate: { type: string, nullable: true }
-        activatedDate: { type: string, nullable: true }
-        createdBy: { type: string, nullable: true }
-        lastUpdateBy: { type: string, nullable: true }
-        customerOrderItem:
-          type: object
-          additionalProperties: true
-          required: [mobileNo, simSerialNo, action]
-          properties:
-            chargingRefAccntId: { type: string, nullable: true }
-            chargingRefCustId: { type: string, nullable: true }
-            mobileNo: { type: string, example: "0893647975" }
-            simSerialNo: { type: string, example: "1330691842973" }
-            action: { type: string, example: "Add" }
-            chargeType: { type: string, nullable: true, example: "Post-paid" }
-        listOrderItem:
-          type: array
-          minItems: 1
-          items:
-            type: object
-            additionalProperties: true
-            required: [action, effectiveType, effectiveDate, idType, idValue]
-            properties:
-              action: { type: string, example: "Add" }
-              effectiveType: { type: string, example: "I" }
-              effectiveDate: { type: string, example: "24/09/2024 00:00:00" }
-              productSeq: { type: string, nullable: true }
-              gvProductSeq: { type: string, nullable: true }
-              idType: { type: string, example: "sffProductCode" }
-              idValue: { type: string, example: "P13054598" }
 
-    # =========================
-    # SKY-MPO Change Product (Rich)
-    # =========================
     SkyMpoChangeProductCallback:
       type: object
       additionalProperties: true
@@ -568,49 +498,17 @@ components:
         publicIdValue: { type: string, example: "0717000964" }
         privateIdType: { type: string, example: "uuid" }
         privateIdValue: { type: string, example: "43ea9527-82f2-4950-add0-af622775b505" }
-        orderNo: { type: string, nullable: true, example: "" }
-
-        # doc shows key has trailing space
-        orderRefId: { type: string, nullable: true, example: "FS-h8z86-230106173656056952239854" }
-        "orderRefId ": { type: string, nullable: true, example: "FS-h8z86-230106173656056952239854" }
-
-        # doc shows State capitalized
         state: { type: string, nullable: true, example: "Completed" }
         State: { type: string, nullable: true, example: "Completed" }
-
-        stateDate: { type: string, nullable: true, example: "" }
-        createdDate: { type: string, nullable: true, example: "" }
-        lastUpdateDate: { type: string, nullable: true, example: "" }
-        activatedDate: { type: string, nullable: true, example: "" }
-        createdBy: { type: string, nullable: true, example: "" }
-        lastUpdateBy: { type: string, nullable: true, example: "" }
-
+        orderRefId: { type: string, nullable: true, example: "FS-h8z86-230106173656056952239854" }
+        "orderRefId ": { type: string, nullable: true, example: "FS-h8z86-230106173656056952239854" }
         listOrderItem:
           type: array
           minItems: 1
           items:
             type: object
             additionalProperties: true
-            required: [idType, idValue, action, effectiveType, effectiveDate]
-            properties:
-              idType: { type: string, example: "sffProductCode" }
-              idValue: { type: string, example: "P13054598" }
-              referenceId: { type: string, nullable: true, example: "" }
-              action: { type: string, example: "Add" }
-              productOrderReason: { type: string, nullable: true, example: "" }
-              effectiveType: { type: string, example: "I" }
-              effectiveDate: { type: string, example: "10/09/2020 10:00:00" }
-              expirationDate: { type: string, nullable: true, example: "10/09/2021 10:00:00" }
-              productSeq: { type: string, nullable: true, example: "" }
-              gvProductSeq: { type: string, nullable: true, example: "" }
-              chargingProductId: { type: string, nullable: true, example: "" }
-              cfsSpecId: { type: string, nullable: true, example: "" }
-              displayName: { type: string, nullable: true, example: "" }
-              sffProductCode: { type: string, nullable: true, example: "" }
 
-    # =========================
-    # SKY-MPO State callback (Change SIM / Suspend / Activate)
-    # =========================
     SkyMpoStateCallback:
       type: object
       additionalProperties: true
@@ -622,9 +520,6 @@ components:
         state: { type: string, example: "Completed" }
         stateDate: { type: string, example: "05/09/2023 10:41:46" }
 
-    # =========================
-    # SKY-MPO Terminate callback (state + publicId)
-    # =========================
     SkyMpoTerminateCallback:
       type: object
       additionalProperties: true
